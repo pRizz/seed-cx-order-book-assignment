@@ -26,8 +26,7 @@ export default class CoinbaseOrderBookSubscriber extends EventEmitter {
       const subscriptionMessage = JSON.stringify({
         type: 'subscribe',
         product_ids: [
-          'ETH-USD',
-          'ETH-EUR'
+          'ETH-USD'
         ],
         channels: [
           'level2',

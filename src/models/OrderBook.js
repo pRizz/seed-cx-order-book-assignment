@@ -1,3 +1,5 @@
+import Order from './Order'
+
 export default class OrderBook {
   constructor() {
     this.bids = {}
@@ -9,11 +11,11 @@ export default class OrderBook {
     this.asks = {}
     snapshot.bids.forEach((bidTuple) => {
       const [price, size] = bidTuple
-      this.bids[price] = size
+      this.bids[price] = new Order({ price, size })
     })
     snapshot.asks.forEach((askTuple) => {
       const [price, size] = askTuple
-      this.asks[price] = size
+      this.asks[price] = new Order({ price, size })
     })
   }
 
@@ -26,14 +28,14 @@ export default class OrderBook {
             delete this.bids[price]
             break
           }
-          this.bids[price] = size
+          this.bids[price] = new Order({ price, size })
           break
         case 'sell':
           if(size === '0') {
             delete this.asks[price]
             break
           }
-          this.asks[price] = size
+          this.asks[price] = new Order({ price, size })
           break
         default:
           break // log error
