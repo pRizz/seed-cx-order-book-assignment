@@ -31,8 +31,8 @@ export default function OrderBookTable(props) {
   const { orderBook } = props
   return (
     <div className={'columns'}>
-      <div className={'column is-half is-offset-one-quarter'} >
-        <Table isStriped className={'box has-text-centered'} style={{width: '100%', margin: 'auto'}}>
+      <div className={'column is-half is-offset-one-quarter'}>
+        <Table isStriped className={'box has-text-centered'}>
           <thead>
           <tr>
             <td colSpan="2">BTC/USD</td>
