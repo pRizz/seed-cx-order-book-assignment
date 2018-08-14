@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import CoinbaseOrderBookSubscriber from './utils/CoinbaseOrderBookSubscriber'
 import OrderBook from './models/OrderBook'
-import OrderBookView from './components/OrderBookView'
+import OrderBookTable from './components/OrderBookTable'
 
 class App extends Component {
   constructor(props) {
@@ -21,7 +21,7 @@ class App extends Component {
       this.state.orderBook.provideL2Update({ l2update })
     })
   }
-  
+
   componentWillMount() {
     console.log('comp will mount')
     setInterval(() => {
@@ -32,7 +32,8 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
+      <div className="App container">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css"/>
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to React</h1>
@@ -40,7 +41,7 @@ class App extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
-        <OrderBookView orderBook={this.state.orderBook}/>
+        <OrderBookTable orderBook={this.state.orderBook}/>
       </div>
     );
   }
