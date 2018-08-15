@@ -4,6 +4,7 @@ import CoinbaseOrderBookSubscriber from './utils/CoinbaseOrderBookSubscriber'
 import OrderBook from './models/OrderBook'
 import OrderBookTable from './components/OrderBookTable'
 import 'bulma/css/bulma.min.css'
+import OrderBookViewModel from "./models/OrderBookViewModel"
 
 class App extends Component {
   constructor(props) {
@@ -16,24 +17,19 @@ class App extends Component {
 
     this.state.orderBookSubscriber.on('snapshot', (snapshot) => {
       this.state.orderBook.provideSnapshot({ snapshot })
+      this.setState({ orderBook: this.state.orderBook })
     })
     this.state.orderBookSubscriber.on('l2update', (l2update) => {
       this.state.orderBook.provideL2Update({ l2update })
+      this.setState({ orderBook: this.state.orderBook })
     })
   }
 
-  componentWillMount() {
-    console.log('comp will mount')
-    setInterval(() => {
-      console.log('setting state')
-      this.setState({ orderBook: this.state.orderBook })
-    }, 2000)
-  }
-
   render() {
+    const orderBookViewModel = new OrderBookViewModel({ orderBook: this.state.orderBook })
     return (
       <div className="App container">
-        <OrderBookTable orderBook={this.state.orderBook}/>
+        <OrderBookTable orderBookViewModel={orderBookViewModel}/>
       </div>
     );
   }

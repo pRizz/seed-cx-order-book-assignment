@@ -14,7 +14,7 @@ function insertSorted({ orderArray, orderToInsert }) {
 function deleteOrderOfPrice({ orders, priceString }) {
   const index = orders.findIndex((order) => order && order.priceString === priceString)
   if(index === -1) { return }
-  delete orders[index]
+  orders.splice(index, 1)
 }
 
 export default class OrderBook {
