@@ -23,5 +23,10 @@ export default class OrderBookViewModel {
   constructor({ orderBook }) {
     this.descendingAskBuckets = generateOrderBuckets({ orders: orderBook.descendingAsks })
     this.descendingBidBuckets = generateOrderBuckets({ orders: orderBook.descendingBids })
+    if(orderBook.descendingAsks.length > 0 && orderBook.descendingBids.length > 0) {
+      this.midpointPrice = _.mean([orderBook.descendingAsks[orderBook.descendingAsks.length - 1].price, orderBook.descendingBids[0].price])
+    } else {
+      this.midpointPrice = 0
+    }
   }
 }

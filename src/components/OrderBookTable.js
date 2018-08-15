@@ -14,7 +14,7 @@ export default class OrderBookTable extends React.Component {
     const { orderBookViewModel } = this.props
     return (
       <div className={'columns'}>
-        <div className={'column'}>
+        <div className="column is-one-third is-offset-one-third">
           <Table isStriped className={'box'}>
             <thead>
             <tr>
@@ -26,7 +26,7 @@ export default class OrderBookTable extends React.Component {
             </thead>
             <tbody>
             {this.createTopLevelAskRows(orderBookViewModel.descendingAskBuckets)}
-            <tr><td colSpan="2">Midpoint Price</td></tr>
+            <tr><td colSpan="2">Midpoint Price: ${orderBookViewModel.midpointPrice}</td></tr>
             {this.createTopLevelBidRows(orderBookViewModel.descendingBidBuckets)}
             </tbody>
           </Table>
