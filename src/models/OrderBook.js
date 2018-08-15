@@ -1,41 +1,58 @@
 import Order from './Order'
 
+function insertSorted({ orderArray, orderToInsert }) {
+  for(let [index, order] of orderArray.entries()) {
+    if(!order) { continue }
+    if(orderToInsert.price > order.price) {
+      orderArray.splice(index, 0, orderToInsert)
+      return
+    }
+  }
+  orderArray.push(orderToInsert)
+}
+
+function deleteOrderOfPrice({ orders, priceString }) {
+  const index = orders.findIndex((order) => order && order.priceString === priceString)
+  if(index === -1) { return }
+  delete orders[index]
+}
+
 export default class OrderBook {
   constructor() {
-    this.bids = {}
-    this.asks = {}
+    this.descendingBids = []
+    this.descendingAsks = []
   }
 
   provideSnapshot({ snapshot }) {
-    this.bids = {}
-    this.asks = {}
+    this.descendingBids = []
+    this.descendingAsks = []
     snapshot.bids.forEach((bidTuple) => {
-      const [price, size] = bidTuple
-      this.bids[price] = new Order({ price, size })
+      const [priceString, sizeString] = bidTuple
+      insertSorted({ orderArray: this.descendingBids, orderToInsert: new Order({ priceString, sizeString }) })
     })
     snapshot.asks.forEach((askTuple) => {
-      const [price, size] = askTuple
-      this.asks[price] = new Order({ price, size })
+      const [priceString, sizeString] = askTuple
+      insertSorted({ orderArray: this.descendingAsks, orderToInsert: new Order({ priceString, sizeString }) })
     })
   }
 
   provideL2Update({ l2update }) {
     l2update.changes.forEach((changeTuple) => {
-      const [side, price, size] = changeTuple
+      const [side, priceString, sizeString] = changeTuple
       switch(side) {
         case 'buy':
-          if(size === '0') {
-            delete this.bids[price]
+          if(sizeString === '0') {
+            deleteOrderOfPrice({ orders: this.descendingBids, priceString })
             break
           }
-          this.bids[price] = new Order({ price, size })
+          insertSorted({ orderArray: this.descendingBids, orderToInsert: new Order({ priceString, sizeString }) })
           break
         case 'sell':
-          if(size === '0') {
-            delete this.asks[price]
+          if(sizeString === '0') {
+            deleteOrderOfPrice({ orders: this.descendingAsks, priceString })
             break
           }
-          this.asks[price] = new Order({ price, size })
+          insertSorted({ orderArray: this.descendingAsks, orderToInsert: new Order({ priceString, sizeString }) })
           break
         default:
           break // log error

@@ -1,6 +1,11 @@
+import shortid from 'shortid'
+
 export default class Order {
-  constructor({ price, size }) {
-    this.price = price
-    this.size = size
+  constructor({ priceString, sizeString }) {
+    this.priceString = priceString
+    this.sizeString = sizeString
+    this.price = parseFloat(priceString)
+    this.size = parseFloat(sizeString)
+    this._key = shortid.generate()
   }
 }

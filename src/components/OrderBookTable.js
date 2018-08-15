@@ -1,28 +1,20 @@
 import React from 'react'
 import { Table } from 'bloomer'
 
-function sortedOrders(orders) {
-  const sorted = []
-  for(let price in orders) {
-    sorted.push(orders[price])
-  }
-  return sorted.sort((lhs, rhs) => parseFloat(rhs.price) - parseFloat(lhs.price))
-}
-
 function createAskRows(asks) {
-  asks = sortedOrders(asks)
   const askRows = []
   for(let ask of asks) {
-    askRows.push(<tr><td style={{color: 'red'}}>${ask.price}</td><td>{ask.size}</td></tr>)
+    if(!ask) { continue }
+    askRows.push(<tr key={ask._key}><td style={{color: 'red'}}>${ask.price}</td><td>{ask.size}</td></tr>)
   }
   return askRows
 }
 
 function createBidRows(bids) {
-  bids = sortedOrders(bids)
   const bidRows = []
   for(let bid of bids) {
-    bidRows.push(<tr><td style={{color: 'green'}}>${bid.price}</td><td>{bid.size}</td></tr>)
+    if(!bid) { continue }
+    bidRows.push(<tr key={bid._key}><td style={{color: 'green'}}>${bid.price}</td><td>{bid.size}</td></tr>)
   }
   return bidRows
 }
@@ -31,7 +23,7 @@ export default function OrderBookTable(props) {
   const { orderBook } = props
   return (
     <div className={'columns'}>
-      <div className={'column is-half is-offset-one-quarter'}>
+      <div className={'column'}>
         <Table isStriped className={'box has-text-centered'}>
           <thead>
           <tr>
@@ -42,9 +34,9 @@ export default function OrderBookTable(props) {
           </tr>
           </thead>
           <tbody>
-          {createAskRows(orderBook.asks)}
+          {createAskRows(orderBook.descendingAsks)}
           <tr><td colSpan="2">Midpoint Price</td></tr>
-          {createBidRows(orderBook.bids)}
+          {createBidRows(orderBook.descendingBids)}
           </tbody>
         </Table>
       </div>
